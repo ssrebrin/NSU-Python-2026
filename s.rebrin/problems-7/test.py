@@ -3,7 +3,7 @@ from unittest.mock import patch, Mock
 import main as m
 
 
-def make_response(html: str, status: int = 200):
+def make_response(html: str, status: int = 200) -> Mock:
     mock = Mock()
     mock.status_code = status
     mock.text = html
@@ -11,15 +11,15 @@ def make_response(html: str, status: int = 200):
 
 
 class TestUtils(unittest.TestCase):
-    def test_strip_parentheses(self):
+    def test_strip_parentheses(self) -> None:
         s = "Hello (world) test"
         self.assertEqual(m.strip_parentheses(s), "Hello  test")
 
-    def test_extract_title(self):
+    def test_extract_title(self) -> None:
         url = "https://en.wikipedia.org/wiki/Hello_World"
         self.assertEqual(m.extract_title(url), "Hello World")
 
-    def test_is_philosophy(self):
+    def test_is_philosophy(self) -> None:
         url = "https://en.wikipedia.org/wiki/Philosophy"
         self.assertTrue(m.is_philosophy(url))
 
@@ -33,7 +33,7 @@ class TestUtils(unittest.TestCase):
 
 
 class TestFindFirstLink(unittest.TestCase):
-    def test_simple_html(self):
+    def test_simple_html(self) -> None:
         html = """
         <div id="mw-content-text">
             <p>
@@ -45,7 +45,7 @@ class TestFindFirstLink(unittest.TestCase):
         link = m.find_first_link(html)
         self.assertEqual(link, "https://en.wikipedia.org/wiki/Test")
 
-    def test_skip_invalid_links(self):
+    def test_skip_invalid_links(self) -> None:
         html = """
         <div id="mw-content-text">
             <p>
@@ -58,7 +58,7 @@ class TestFindFirstLink(unittest.TestCase):
         link = m.find_first_link(html)
         self.assertEqual(link, "https://en.wikipedia.org/wiki/Good")
 
-    def test_no_valid_link(self):
+    def test_no_valid_link(self) -> None:
         html = """
         <div id="mw-content-text">
             <p>No links here</p>
@@ -71,7 +71,7 @@ class TestFindFirstLink(unittest.TestCase):
 class TestWikiIterator(unittest.TestCase):
     @patch("main.requests.get")
     @patch("main.time.sleep", return_value=None)
-    def test_basic_iteration(self, mock_sleep, mock_get):
+    def test_basic_iteration(self, mock_sleep: Mock, mock_get: Mock) -> None:
         html1 = """
         <div id="mw-content-text">
             <p><a href="/wiki/Page2">Next</a></p>
@@ -103,7 +103,7 @@ class TestWikiIterator(unittest.TestCase):
 
     @patch("main.requests.get")
     @patch("main.time.sleep", return_value=None)
-    def test_cycle(self, mock_sleep, mock_get):
+    def test_cycle(self, mock_sleep: Mock, mock_get: Mock) -> None:
         html = """
         <div id="mw-content-text">
             <p><a href="/wiki/Page1">Loop</a></p>
@@ -120,7 +120,7 @@ class TestWikiIterator(unittest.TestCase):
 
     @patch("main.requests.get")
     @patch("main.time.sleep", return_value=None)
-    def test_no_link(self, mock_sleep, mock_get):
+    def test_no_link(self, mock_sleep: Mock, mock_get: Mock) -> None:
         html = """
         <div id="mw-content-text">
             <p>No links</p>
@@ -137,7 +137,7 @@ class TestWikiIterator(unittest.TestCase):
 
     @patch("main.requests.get")
     @patch("main.time.sleep", return_value=None)
-    def test_max_steps(self, mock_sleep, mock_get):
+    def test_max_steps(self, mock_sleep: Mock, mock_get: Mock) -> None:
         html = """
         <div id="mw-content-text">
             <p><a href="/wiki/Next">Next</a></p>

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 import time
 from typing import Dict, Union
@@ -84,16 +86,16 @@ class WikiIterator:
     headers = {"User-Agent": "Mozilla/5.0"}
 
     def __init__(self, start_url: str, sleep_time: float = 0.5, max_steps: int = 50):
-        self.current = start_url
+        self.current: str | None = start_url
         self.visited: set[str] = set()
         self.sleep = sleep_time
         self.steps = 0
         self.max_steps = max_steps
 
-    def __iter__(self):
+    def __iter__(self) -> WikiIterator:
         return self
 
-    def __next__(self):
+    def __next__(self) -> str:
         if self.current is None:
             raise StopIteration
         if self.current in self.visited:
@@ -131,7 +133,7 @@ class WikiIterator:
         return result
 
 
-def main():
+def main() -> None:
     start = get_random_page()
     print("Start:", start)
 
