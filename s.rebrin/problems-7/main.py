@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 import time
-from typing import Dict, Union
+from typing import Dict, Union, MutableMapping
 
 import requests
 from bs4 import BeautifulSoup
@@ -73,9 +73,14 @@ def get_random_page() -> str:
         "rnlimit": 1,
     }
 
-    headers = {"User-Agent": "Mozilla/5.0"}
+    headers: MutableMapping[str, str | bytes] = {
+        "User-Agent": "NSU-Python-Course/1.0 (student project)"
+    }
 
     r = requests.get(url, params=params, headers=headers)
+    print(r.status_code)
+    print(r.headers.get("Content-Type"))
+    print(r.text[:500])
     data = r.json()
 
     title = data["query"]["random"][0]["title"]
@@ -83,7 +88,9 @@ def get_random_page() -> str:
 
 
 class WikiIterator:
-    headers = {"User-Agent": "Mozilla/5.0"}
+    headers: MutableMapping[str, str | bytes] = {
+        "User-Agent": "NSU-Python-Course/1.0 (student project)"
+    }
 
     def __init__(self, start_url: str, sleep_time: float = 0.5, max_steps: int = 50):
         self.current: str | None = start_url
